@@ -1,0 +1,140 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        max-width: 1100px;
+        margin-bottom: 36px;
+    }
+
+    .stat-card {
+        background: linear-gradient(145deg, #cdb49a, #b8987a);
+        border: 1px solid #333;
+        border-radius: 14px;
+        padding: 24px 20px;
+        display: flex; flex-direction: column;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+        width: 42px; height: 42px; border-radius: 10px;
+        background: rgba(255,255,255,0.25);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem; color: #2e221a;
+        margin-bottom: 16px;
+    }
+
+    .stat-value {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem; font-weight: 600;
+        color: #1a1a1a; line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .stat-label {
+        font-size: 0.82rem; color: #4a3a2e;
+        font-weight: 500; text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .welcome-banner {
+        background: linear-gradient(135deg, #c1a88f, #8b6347);
+        border-radius: 16px; padding: 28px 32px;
+        margin-bottom: 32px; max-width: 1100px;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .welcome-banner h2 {
+        font-family: 'Playfair Display', serif;
+        color: white; font-size: 1.5rem; font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .welcome-banner p {
+        color: rgba(255,255,255,0.75); font-size: 0.88rem;
+    }
+
+    .welcome-role {
+        background: rgba(255,255,255,0.2);
+        color: white; padding: 6px 16px;
+        border-radius: 20px; font-size: 0.82rem;
+        font-weight: 500; border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .quick-links {
+        display: flex; gap: 14px; flex-wrap: wrap;
+        max-width: 1100px;
+    }
+
+    .quick-link {
+        background: #f5efe8; border: 1px solid #c9b9a8;
+        border-radius: 12px; padding: 16px 22px;
+        text-decoration: none; color: #2e221a;
+        display: flex; align-items: center; gap: 10px;
+        font-size: 0.9rem; font-weight: 500;
+        transition: background 0.15s, transform 0.15s;
+    }
+    .quick-link:hover {
+        background: #ede0d4; transform: translateY(-2px);
+    }
+    .quick-link i { color: #b07d5a; font-size: 1rem; }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem; color: #2e221a;
+        margin-bottom: 16px; font-weight: 600;
+    }
+</style>
+}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <div>
+        <h2>Good day, @ViewBag.CurrentUserName! 🌸</h2>
+        <p>Here's what's happening at Blooms & Stitch today.</p>
+    </div>
+    <span class="welcome-role">@ViewBag.CurrentUserRole</span>
+</div>
+
+<!-- Stats -->
+<p class="section-title">Overview</p>
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="far fa-user"></i></div>
+        <div class="stat-value">@ViewBag.TotalUsers</div>
+        <div class="stat-label">Total Users</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+        <div class="stat-value">@ViewBag.TotalOrders</div>
+        <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-value">@ViewBag.PendingOrders</div>
+        <div class="stat-label">Pending Orders</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-value">@ViewBag.CompletedOrders</div>
+        <div class="stat-label">Completed Orders</div>
+    </div>
+</div>
+
+<!-- Quick Links -->
+<p class="section-title">Quick Access</p>
+<div class="quick-links">
+    <a href="/User" class="quick-link"><i class="far fa-user"></i> User Management</a>
+    <a href="/Order" class="quick-link"><i class="fas fa-receipt"></i> Order Management</a>
+</div>

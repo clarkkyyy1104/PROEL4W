@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+<style>
+    .farmer-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 40px; }
+    .farmer-banner { background: linear-gradient(135deg, #c8b87a, #8b7a3a); border-radius: 16px; padding: 36px 40px; max-width: 500px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    .farmer-banner h2 { font-family: 'Playfair Display', serif; color: white; font-size: 1.8rem; font-weight: 600; margin-bottom: 8px; }
+    .farmer-banner p { color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
+    .farmer-icon { font-size: 3rem; margin-bottom: 16px; }
+    .farmer-role { background: rgba(255,255,255,0.2); color: white; padding: 6px 20px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); display: inline-block; }
+    .farmer-notice { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px; margin-top: 16px; font-size: 0.82rem; color: rgba(255,255,255,0.75); }
+</style>
+}
+
+<div class="farmer-wrapper">
+    <div class="farmer-banner">
+        <div class="farmer-icon">🌾</div>
+        <h2>Welcome, @ViewBag.CurrentUserName!</h2>
+        <p>You are logged in as a Farmer. Your role focuses on cultivation and supply. Please contact an Admin for system access requests.</p>
+        <span class="farmer-role">@ViewBag.CurrentUserRole</span>
+        <div class="farmer-notice">
+            <i class="fas fa-lock" style="margin-right:6px;"></i>
+            Management pages are restricted to your role.
+        </div>
+    </div>
+</div>

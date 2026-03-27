@@ -1,0 +1,71 @@
+.orders-table-wrapper {
+    background: #f5efe8;
+    border-radius: 16px;
+    border: 1px solid #c9b9a8;
+    overflow: hidden;
+    max-width: 1100px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+.table-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid #ddd0c4;
+}
+
+.order-count {
+    font-size: 0.85rem; color: #7a6a5a; font-weight: 500;
+}
+
+table {
+    width: 100%; border-collapse: collapse;
+}
+
+thead th {
+    background: #e8ddd2; padding: 14px 20px;
+    font-size: 0.75rem; text-transform: uppercase;
+    letter-spacing: 0.07em; color: #6b5a4e;
+    font-weight: 600; text-align: left;
+    border-bottom: 1px solid #d0c4b8;
+}
+
+tbody tr {
+    border-bottom: 1px solid #e8ddd2;
+    transition: background 0.15s;
+}
+tbody tr:hover { background: rgba(0,0,0,0.02); }
+tbody tr:last-child { border-bottom: none; }
+
+tbody td {
+    padding: 16px 20px; font-size: 0.9rem; color: #2e221a;
+}
+
+.order-id { color: #9a7d65; font-size: 0.8rem; font-weight: 600; }
+.customer-cell { font-weight: 500; }
+.product-cell { color: #4a3a2e; }
+
+.status-pill {
+    display: inline-block; padding: 4px 14px;
+    border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.03em;
+}
+.status-pill.pending { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.status-pill.completed { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.status-pill.cancelled { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+.date-cell { color: #7a6a5a; font-size: 0.85rem; }
+
+.action-btns { display: flex; gap: 8px; }
+.action-btns button {
+    background: none; border: 1px solid #c9b9a8;
+    border-radius: 8px; padding: 6px 10px;
+    cursor: pointer; font-size: 0.85rem; color: #4a3a2e;
+    transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.action-btns button:hover { background: #e8ddd2; }
+.action-btns button.delete-btn:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+
+.empty-state {
+    text-align: center; padding: 60px 20px; color: #7a6a5a;
+}
+.empty-state i { font-size: 3rem; margin-bottom: 12px; opacity: 0.35; display: block; }

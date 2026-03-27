@@ -1,0 +1,161 @@
+@model IEnumerable<FINAL.Models.User>
+@{
+    ViewData["Title"] = "User Management";
+    ViewData["ActivePage"] = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user.css" />
+}
+
+<header class="page-header">
+    <h1>User Management</h1>
+    <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-user-plus"></i> Add User
+    </button>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="far fa-user-circle"></i>
+        <p>No users found. Add your first user!</p>
+    </div>
+}
+else
+{
+    <div class="user-grid">
+        @foreach (var user in Model)
+        {
+            <div class="user-card">
+                <div class="user-avatar">@user.Name[0]</div>
+                <h3 class="user-name">@user.Name</h3>
+                <div class="user-role">@user.Role</div>
+                <div class="card-footer">
+                    <span class="status-badge @user.Status.ToLower()">@user.Status</span>
+                    <div class="action-icons">
+                        <button onclick="openEditModal(@user.Id, '@user.Name', '@user.Role', '@user.Status')" title="Edit">
+                            <i class="far fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="openDeleteModal(@user.Id, '@user.Name')" title="Delete">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- add user modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Add New User</h2>
+        <form method="post" action="/User/Create">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="Name" placeholder="e.g. Maria Santos" required />
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="Role" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Sales Associate">Sales Associate</option>
+                    <option value="Florist">Florist</option>
+                    <option value="Farmer">Farmer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="Status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- edit user modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+        <h2>Edit User</h2>
+        <form method="post" id="editForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" id="editId" />
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="Name" id="editName" required />
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="Role" id="editRole" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Sales Associate">Sales Associate</option>
+                    <option value="Florist">Florist</option>
+                    <option value="Farmer">Farmer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="Status" id="editStatus">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- delete confirm modal -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box" style="text-align:center;">
+        <h2 style="margin-bottom:12px;">Delete User</h2>
+        <p style="color:#6b5a4e; margin-bottom:28px;">
+            Are you sure you want to delete <strong id="deleteUserName"></strong>? This action cannot be undone.
+        </p>
+        <form method="post" id="deleteForm">
+            @Html.AntiForgeryToken()
+            <div class="modal-actions" style="justify-content:center;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+    function openEditModal(id, name, role, status) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editName').value = name;
+        document.getElementById('editRole').value = role;
+        document.getElementById('editStatus').value = status;
+        document.getElementById('editForm').action = '/User/Edit/' + id;
+        document.getElementById('editModal').classList.add('open');
+    }
+    function openDeleteModal(id, name) {
+        document.getElementById('deleteUserName').textContent = name;
+        document.getElementById('deleteForm').action = '/User/Delete/' + id;
+        document.getElementById('deleteModal').classList.add('open');
+    }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+    });
+</script>
+}

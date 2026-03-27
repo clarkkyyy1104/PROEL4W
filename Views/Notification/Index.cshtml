@@ -1,0 +1,121 @@
+@model IEnumerable<FINAL.Models.Notification>
+@{
+    ViewData["Title"] = "Notification Management";
+    ViewData["ActivePage"] = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/notification.css" />
+}
+
+<header class="page-header">
+    <h1>Notification Management</h1>
+    <div style="display:flex; gap:10px; align-items:center;">
+        @if (ViewBag.UnreadCount > 0)
+        {
+            <span class="unread-badge">@ViewBag.UnreadCount unread</span>
+            <form method="post" action="/Notification/MarkAllRead" style="margin:0;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-add" style="background:#e8ddd2;">
+                    <i class="fas fa-check-double"></i> Mark All Read
+                </button>
+            </form>
+        }
+        <button class="btn-add" onclick="openAddModal()">
+            <i class="fas fa-plus"></i> New Notification
+        </button>
+    </div>
+</header>
+
+<!-- Search -->
+<form method="get" action="/Notification/Index" class="search-form">
+    <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" name="search" value="@ViewBag.Search" placeholder="Search..." class="search-input" />
+    </div>
+</form>
+
+<!-- Notifications Table -->
+<div class="notif-table-wrapper">
+    <div class="notif-table-header">
+        <span>Notification Message</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="far fa-bell"></i>
+            <p>No notifications yet.</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var notif in Model)
+        {
+            <div class="notif-row @(notif.IsRead ? "read" : "unread")">
+                <form method="post" action="/Notification/ToggleRead/@notif.Id" style="margin:0;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="notif-checkbox" title="@(notif.IsRead ? "Mark as unread" : "Mark as read")">
+                        <i class="@(notif.IsRead ? "fas fa-check-square" : "far fa-square")"></i>
+                    </button>
+                </form>
+
+                <div class="notif-content">
+                    <span class="notif-message @(notif.IsRead ? "" : "bold")">
+                        @if (notif.Type == "auto")
+                        {
+                            <i class="fas fa-robot notif-type-icon" title="Auto-generated"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-user notif-type-icon" title="Manual"></i>
+                        }
+                        @notif.Message
+                    </span>
+                </div>
+
+                <span class="notif-time">@notif.CreatedAt.ToString("h:mm tt")</span>
+
+                <form method="post" action="/Notification/Delete/@notif.Id" style="margin:0;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="notif-delete-btn" title="Delete"
+                            onclick="return confirm('Delete this notification?')">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </form>
+            </div>
+        }
+    }
+</div>
+
+<!-- ADD NOTIFICATION MODAL -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>New Notification</h2>
+        <form method="post" action="/Notification/Create">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label>Message</label>
+                <textarea name="message" rows="4" placeholder="Enter notification message..." required
+                          style="width:100%; padding:11px 14px; border:1px solid #c9b9a8; border-radius:9px; font-size:0.9rem; font-family:'DM Sans',sans-serif; resize:vertical; outline:none;"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+    });
+</script>
+}

@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    ViewData["ActivePage"] = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+<style>
+    .denied-wrapper {
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        min-height: 60vh; text-align: center;
+        padding: 40px;
+    }
+    .denied-icon {
+        width: 80px; height: 80px; border-radius: 50%;
+        background: #fee2e2; display: flex;
+        align-items: center; justify-content: center;
+        font-size: 2rem; color: #dc2626;
+        margin-bottom: 24px;
+    }
+    .denied-wrapper h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem; color: #2e221a;
+        margin-bottom: 12px;
+    }
+    .denied-wrapper p {
+        color: #7a6a5a; font-size: 0.95rem;
+        margin-bottom: 28px; max-width: 400px; line-height: 1.6;
+    }
+    .btn-back {
+        background: linear-gradient(135deg, #c1a88f, #a07858);
+        color: white; border: none; border-radius: 22px;
+        padding: 12px 28px; font-size: 0.9rem;
+        font-weight: 600; cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+        text-decoration: none; display: inline-block;
+        transition: filter 0.2s;
+    }
+    .btn-back:hover { filter: brightness(1.05); }
+</style>
+}
+
+<div class="denied-wrapper">
+    <div class="denied-icon">
+        <i class="fas fa-lock"></i>
+    </div>
+    <h2>Access Denied</h2>
+    <p>You don't have permission to view this page. This area is restricted to Admin users only.</p>
+    <a href="/Dashboard/Index" class="btn-back">
+        <i class="fas fa-arrow-left" style="margin-right:8px;"></i> Back to Dashboard
+    </a>
+</div>

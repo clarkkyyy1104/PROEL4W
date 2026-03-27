@@ -1,0 +1,100 @@
+@using Microsoft.AspNetCore.Identity
+@using FINAL.Models
+@inject UserManager<AppUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userRole = currentUser?.Role ?? "Staff";
+    var isAdmin = userRole == "Admin";
+    var isFarmer = userRole == "Farmer";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blooms & Stitch - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/layout.css" />
+    <link rel="stylesheet" href="~/css/inventory.css" />
+    <link rel="stylesheet" href="~/css/user.css" />
+    <link rel="stylesheet" href="~/css/order.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo"><i class="fas fa-seedling"></i></div>
+            <div class="brand-text">
+                <h2>Blooms & Stitch</h2>
+                <p>Crochet Flowers</p>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <a href="/Dashboard/Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="fas fa-border-all"></i> Dashboard
+            </a>
+
+            @* Admin-only nav items *@
+            @if (isAdmin)
+            {
+                <a href="/User/Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "User" ? "active" : "")">
+                    <i class="far fa-user"></i> User Management
+                </a>
+            }
+
+            @* All roles except Farmer *@
+            @if (!isFarmer)
+            {
+                <a href="/Order/Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Order" ? "active" : "")">
+                    <i class="fas fa-receipt"></i> Order Management
+                </a>
+                <a href="/Inventory/Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Inventory" ? "active" : "")">
+                    <i class="fas fa-boxes"></i> Inventory
+                </a>
+                <a href="/Notification/Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Notifications" ? "active" : "")">
+                    <i class="far fa-bell"></i> Notifications
+                </a>
+            }
+
+            @* Admin-only *@
+            @if (isAdmin)
+            {
+                <li class="nav-item @(ViewData["ActivePage"]?.ToString() == "Reports" ? "active" : "")">
+                    <i class="far fa-clipboard"></i> Reports
+                </li>
+                <li class="nav-item @(ViewData["ActivePage"]?.ToString() == "Settings" ? "active" : "")">
+                    <i class="fas fa-cog"></i> Settings
+                </li>
+            }
+        </ul>
+
+        <!-- User info -->
+        <div style="padding: 12px 18px; border-top: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <div style="font-size:0.78rem; color:#6b5a4e; font-weight:500;">@currentUser?.FullName</div>
+            <div style="font-size:0.72rem; color:#9a8a7a;">@userRole</div>
+        </div>
+
+        <form method="post" action="/Account/Logout">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="logout-container" style="width:100%; border:none; cursor:pointer; text-align:left;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </aside>
+
+    <main class="main-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="toast-container">
+                <div class="toast"><i class="fas fa-check-circle" style="margin-right:8px;"></i>@TempData["Success"]</div>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
