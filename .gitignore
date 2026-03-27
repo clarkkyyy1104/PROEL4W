@@ -1,0 +1,25 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# ASP.NET Core
+appsettings.Development.json
+*.pfx
+
+# NuGet
+packages/
+*.nupkg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Migrations — keep these, they contain your DB structure
+# !Migrations/
